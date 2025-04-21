@@ -22,11 +22,8 @@ export class AppComponent {
   savedEntries: Entry[] = [];
 
   onSubmit() {
-    // save data
-    // clear form entries
-    //
-
-    console.log('on submit', this.jokeForm);
+    this.savedEntries.push(this.jokeForm.value as Entry);
+    this.jokeForm.reset();
   }
 }
 
