@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { JokeService } from './joke.service';
+import { FibonacciService } from './fibonacci.service';
 
 @Component({
   selector: 'app-root',
@@ -23,18 +24,13 @@ export class AppComponent {
   fibonacciSequence: number[] = [];
   savedEntries: Entry[] = [];
 
-  constructor(private jokeService: JokeService) {}
+  constructor(
+    private jokeService: JokeService,
+    private fibonacciService: FibonacciService
+  ) {}
 
   ngOnInit() {
-    this.fibonacciSequence = this.generateFibonacci(100);
-  }
-
-  private generateFibonacci(count: number): number[] {
-    const sequence = [0, 1];
-    for (let i = 2; i < count; i++) {
-      sequence.push(sequence[i - 1] + sequence[i - 2]);
-    }
-    return sequence;
+    this.fibonacciSequence = this.fibonacciService.fetchFibonacci();
   }
 
   async onSubmit() {
