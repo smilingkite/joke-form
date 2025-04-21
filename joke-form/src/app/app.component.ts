@@ -20,10 +20,10 @@ export class AppComponent {
   });
 
   fibonacciSequence: number[] = [];
-
   savedEntries: Entry[] = [];
+
   ngOnInit() {
-    this.fibonacciSequence = this.generateFibonacci(10);
+    this.fibonacciSequence = this.generateFibonacci(100);
   }
 
   private generateFibonacci(count: number): number[] {
@@ -33,27 +33,27 @@ export class AppComponent {
     }
     return sequence;
   }
-  onSubmit() {
+
+  async onSubmit() {
     // length of current savedEntries array is equal to  index of new entry.
     const fibonacciBool = this.fibonacciSequence.includes(
       this.savedEntries.length
     );
     let randomJoke = '';
-    fetch('https://api.chucknorris.io/jokes/random')
-      .then((response) => response.json())
-      .then((data) => {
-        randomJoke = data.value;
-        this.savedEntries.push({
-          ...(this.jokeForm.value as Entry),
-          isFibonacci: fibonacciBool,
-          randomJoke: randomJoke,
-        });
-        this.jokeForm.reset();
-      })
-      .catch((error) => {
-        console.error('Error fetching joke:', error);
-        this.jokeForm.reset();
-      });
+    try {
+      const response = await fetch('https://api.chucknorris.io/jokes/random');
+      const data = await response.json();
+      randomJoke = data.value;
+      this.savedEntries.push({
+        ...this.jokeForm.value,
+        isFibonacci: fibonacciBool,
+        randomJoke: randomJoke,
+      } as Entry);
+      this.jokeForm.reset();
+    } catch (error) {
+      console.error('Error fetching joke:', error);
+      this.jokeForm.reset();
+    }
   }
 }
 

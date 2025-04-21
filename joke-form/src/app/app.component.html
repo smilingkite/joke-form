@@ -3,11 +3,11 @@
     <div class="left-side">
       <form [formGroup]="jokeForm" (ngSubmit)="onSubmit()">
         <div>
-          <label for="name">Name:</label>
+          <label for="name">Name: </label>
           <input id="name" type="text" formControlName="name" />
         </div>
         <div>
-          <label for="phone">Phone Number:</label>
+          <label for="phone">Phone Number: </label>
           <input id="phone" type="tel" formControlName="phone" />
         </div>
         <button type="submit" [disabled]="!jokeForm.valid">save</button>
