@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { JokeService } from './joke.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,8 @@ export class AppComponent {
   fibonacciSequence: number[] = [];
   savedEntries: Entry[] = [];
 
+  constructor(private jokeService: JokeService) {}
+
   ngOnInit() {
     this.fibonacciSequence = this.generateFibonacci(100);
   }
@@ -39,21 +42,16 @@ export class AppComponent {
     const fibonacciBool = this.fibonacciSequence.includes(
       this.savedEntries.length
     );
+
     let randomJoke = '';
-    try {
-      const response = await fetch('https://api.chucknorris.io/jokes/random');
-      const data = await response.json();
-      randomJoke = data.value;
-      this.savedEntries.push({
-        ...this.jokeForm.value,
-        isFibonacci: fibonacciBool,
-        randomJoke: randomJoke,
-      } as Entry);
-      this.jokeForm.reset();
-    } catch (error) {
-      console.error('Error fetching joke:', error);
-      this.jokeForm.reset();
-    }
+    randomJoke = await this.jokeService.fetchJokes();
+    this.savedEntries.push({
+      ...this.jokeForm.value,
+      isFibonacci: fibonacciBool,
+      randomJoke: randomJoke,
+    } as Entry);
+
+    this.jokeForm.reset();
   }
 }
 
