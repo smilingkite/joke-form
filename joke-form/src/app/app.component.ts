@@ -38,11 +38,22 @@ export class AppComponent {
     const fibonacciBool = this.fibonacciSequence.includes(
       this.savedEntries.length
     );
-    this.savedEntries.push({
-      ...(this.jokeForm.value as Entry),
-      isFibonacci: fibonacciBool,
-    });
-    this.jokeForm.reset();
+    let randomJoke = '';
+    fetch('https://api.chucknorris.io/jokes/random')
+      .then((response) => response.json())
+      .then((data) => {
+        randomJoke = data.value;
+        this.savedEntries.push({
+          ...(this.jokeForm.value as Entry),
+          isFibonacci: fibonacciBool,
+          randomJoke: randomJoke,
+        });
+        this.jokeForm.reset();
+      })
+      .catch((error) => {
+        console.error('Error fetching joke:', error);
+        this.jokeForm.reset();
+      });
   }
 }
 
@@ -55,4 +66,5 @@ interface Entry {
   name: string;
   phone: string;
   isFibonacci: boolean;
+  randomJoke: string;
 }
