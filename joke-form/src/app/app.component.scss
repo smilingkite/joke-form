@@ -55,6 +55,10 @@ main {
 
 .content p {
   margin-top: 1.5rem;
+  &.isFibonacci {
+    color: green;
+    font-weight: bold;
+  }
 }
 
 .divider {

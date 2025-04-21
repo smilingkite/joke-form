@@ -16,7 +16,9 @@
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
       @for(entry of savedEntries; track entry.name){
-      <p>{{ entry.name }} - {{ entry.phone }}</p>
+      <p [class]="entry.isFibonacci ? 'isFibonacci' : ''">
+        {{ $index }} {{ entry.name }} - {{ entry.phone }}
+      </p>
       }
       <!-- show random joke with  each line -->
       <!-- show row as green when index matches a fibonacci number (1,2,3,5,8 etc) -->

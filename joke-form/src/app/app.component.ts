@@ -19,10 +19,29 @@ export class AppComponent {
     }),
   });
 
-  savedEntries: Entry[] = [];
+  fibonacciSequence: number[] = [];
 
+  savedEntries: Entry[] = [];
+  ngOnInit() {
+    this.fibonacciSequence = this.generateFibonacci(10);
+  }
+
+  private generateFibonacci(count: number): number[] {
+    const sequence = [0, 1];
+    for (let i = 2; i < count; i++) {
+      sequence.push(sequence[i - 1] + sequence[i - 2]);
+    }
+    return sequence;
+  }
   onSubmit() {
-    this.savedEntries.push(this.jokeForm.value as Entry);
+    // length of current savedEntries array is equal to  index of new entry.
+    const fibonacciBool = this.fibonacciSequence.includes(
+      this.savedEntries.length
+    );
+    this.savedEntries.push({
+      ...(this.jokeForm.value as Entry),
+      isFibonacci: fibonacciBool,
+    });
     this.jokeForm.reset();
   }
 }
@@ -35,4 +54,5 @@ interface JokeForm {
 interface Entry {
   name: string;
   phone: string;
+  isFibonacci: boolean;
 }
