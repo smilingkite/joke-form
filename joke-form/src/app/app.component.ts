@@ -7,22 +7,35 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './app.component.scss',
   imports: [ReactiveFormsModule],
 })
-
-// enable save button only when data is valid
 export class AppComponent {
   jokeForm = new FormGroup<JokeForm>({
-    name: new FormControl(''),
-    phone: new FormControl(),
+    name: new FormControl('', {
+      validators: (control) =>
+        control.value && control.value.length >= 2 ? null : { minlength: true },
+    }),
+    phone: new FormControl('', {
+      validators: (control) =>
+        /^\d{10}$/.test(control.value || '') ? null : { invalidPhone: true },
+    }),
   });
+
+  savedEntries: Entry[] = [];
 
   onSubmit() {
     // save data
     // clear form entries
     //
+
+    console.log('on submit', this.jokeForm);
   }
 }
 
 interface JokeForm {
   name: FormControl<string | null>;
-  phone: FormControl<number>;
+  phone: FormControl<string | null>;
+}
+
+interface Entry {
+  name: string;
+  phone: string;
 }
