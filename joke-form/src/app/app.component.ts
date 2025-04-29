@@ -15,6 +15,7 @@ import { FibonacciService } from './fibonacci.service';
   styleUrl: './app.component.scss',
   imports: [ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [FibonacciService],
 })
 export class AppComponent {
   private jokeService = inject(JokeService);
@@ -29,16 +30,12 @@ export class AppComponent {
     }),
   });
 
-  fibonacciSequence: number[] = [];
+  fibonacciSequence = this.fibonacciService.fibonnaciSequence.asReadonly();
   savedEntries: Entry[] = [];
-
-  ngOnInit() {
-    this.fibonacciSequence = this.fibonacciService.fetchFibonacci();
-  }
 
   async onSubmit() {
     // length of current savedEntries array is equal to  index of new entry.
-    const fibonacciBool = this.fibonacciSequence.includes(
+    const fibonacciBool = this.fibonacciSequence().includes(
       this.savedEntries.length
     );
 

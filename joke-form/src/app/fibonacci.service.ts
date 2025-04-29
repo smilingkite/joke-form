@@ -1,11 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FibonacciService {
-  fetchFibonacci(count = 100): number[] {
-    return this.generateFibonacci(count);
+  fibonnaciSequence = signal([] as number[]);
+
+  constructor() {
+    this.fetchFibonacci();
+  }
+
+  fetchFibonacci(count = 100): void {
+    this.fibonnaciSequence.update(() => this.generateFibonacci(count));
   }
 
   private generateFibonacci(count: number): number[] {
