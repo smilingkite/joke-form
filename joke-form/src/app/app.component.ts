@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { first } from 'rxjs';
+import {
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { JokeService } from './joke.service';
 import { FibonacciService } from './fibonacci.service';
 
@@ -8,26 +14,23 @@ import { FibonacciService } from './fibonacci.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   imports: [ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
+  private jokeService = inject(JokeService);
+  private fibonacciService = inject(FibonacciService);
+
   jokeForm = new FormGroup<JokeForm>({
     name: new FormControl('', {
-      validators: (control) =>
-        control.value && control.value.length >= 2 ? null : { minlength: true },
+      validators: [Validators.minLength(2), Validators.required],
     }),
     phone: new FormControl('', {
-      validators: (control) =>
-        /^\d{10}$/.test(control.value || '') ? null : { invalidPhone: true },
+      validators: [Validators.required, Validators.pattern('[0-9]{10}')],
     }),
   });
 
   fibonacciSequence: number[] = [];
   savedEntries: Entry[] = [];
-
-  constructor(
-    private jokeService: JokeService,
-    private fibonacciService: FibonacciService
-  ) {}
 
   ngOnInit() {
     this.fibonacciSequence = this.fibonacciService.fetchFibonacci();
@@ -39,15 +42,17 @@ export class AppComponent {
       this.savedEntries.length
     );
 
-    let randomJoke = '';
-    randomJoke = await this.jokeService.fetchJokes();
-    this.savedEntries.push({
-      ...this.jokeForm.value,
-      isFibonacci: fibonacciBool,
-      randomJoke: randomJoke,
-    } as Entry);
-
-    this.jokeForm.reset();
+    this.jokeService
+      .fetchJokes()
+      .pipe(first())
+      .subscribe((randomJoke) => {
+        this.savedEntries.push({
+          ...this.jokeForm.value,
+          isFibonacci: fibonacciBool,
+          randomJoke: randomJoke,
+        } as Entry);
+        this.jokeForm.reset();
+      });
   }
 }
 
