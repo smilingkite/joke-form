@@ -15,7 +15,6 @@ import { FibonacciService } from './fibonacci.service';
   styleUrl: './app.component.scss',
   imports: [ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [FibonacciService],
 })
 export class AppComponent {
   private jokeService = inject(JokeService);
