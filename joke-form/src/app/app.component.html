@@ -4,11 +4,11 @@
       <form [formGroup]="jokeForm" (ngSubmit)="onSubmit()">
         <div>
           <label for="name">Name: </label>
-          <input id="name" type="text" [formControl]="name" />
+          <input id="name" type="text" formControlName="name" />
         </div>
         <div>
           <label for="phone">Phone Number: </label>
-          <input id="phone" type="tel" [formControl]="phone" />
+          <input id="phone" type="tel" formControlName="phone" />
         </div>
         <button type="submit" [disabled]="!jokeForm.valid">save</button>
       </form>

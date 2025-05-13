@@ -5,6 +5,7 @@ import {
   FormControl,
   ReactiveFormsModule,
   Validators,
+  FormBuilder,
 } from '@angular/forms';
 import { JokeService } from './joke.service';
 import { FibonacciService } from './fibonacci.service';
@@ -19,20 +20,32 @@ import { FibonacciService } from './fibonacci.service';
 export class AppComponent {
   private jokeService = inject(JokeService);
   private fibonacciService = inject(FibonacciService);
+  fb = inject(FormBuilder);
 
-  name = new FormControl('', {
-    validators: [Validators.minLength(2), Validators.required],
-    updateOn: 'blur',
-  });
-  phone = new FormControl('', {
-    validators: [Validators.required, Validators.pattern('[0-9]{10}')],
-    updateOn: 'change',
+  jokeForm = this.fb.group({
+    phone: [
+      '',
+      {
+        validators: [Validators.required, Validators.pattern('[0-9]{10}')],
+        // updateOn: 'blur',
+      },
+    ],
+    name: ['', [Validators.minLength(2), Validators.required]],
   });
 
-  jokeForm = new FormGroup<JokeForm>({
-    name: this.name,
-    phone: this.phone,
-  });
+  // name = new FormControl('', {
+  //   validators: [Validators.minLength(2), Validators.required],
+  //   updateOn: 'blur',
+  // });
+  // phone = new FormControl('', {
+  //   validators: [Validators.required, Validators.pattern('[0-9]{10}')],
+  //   updateOn: 'change',
+  // });
+
+  // jokeForm = new FormGroup<JokeForm>({
+  //   name: this.name,
+  //   phone: this.phone,
+  // });
 
   fibonacciSequence = this.fibonacciService.fibonnaciSequence.asReadonly();
   savedEntries: Entry[] = [];
