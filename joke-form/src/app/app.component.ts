@@ -20,13 +20,18 @@ export class AppComponent {
   private jokeService = inject(JokeService);
   private fibonacciService = inject(FibonacciService);
 
+  name = new FormControl('', {
+    validators: [Validators.minLength(2), Validators.required],
+    updateOn: 'blur',
+  });
+  phone = new FormControl('', {
+    validators: [Validators.required, Validators.pattern('[0-9]{10}')],
+    updateOn: 'change',
+  });
+
   jokeForm = new FormGroup<JokeForm>({
-    name: new FormControl('', {
-      validators: [Validators.minLength(2), Validators.required],
-    }),
-    phone: new FormControl('', {
-      validators: [Validators.required, Validators.pattern('[0-9]{10}')],
-    }),
+    name: this.name,
+    phone: this.phone,
   });
 
   fibonacciSequence = this.fibonacciService.fibonnaciSequence.asReadonly();
