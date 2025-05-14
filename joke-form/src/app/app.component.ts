@@ -70,6 +70,8 @@ export class AppComponent {
   }
 }
 
+// niet nodig als je formBuilder gebruikt.
+// Dan is het type-safe out of the box met type-inference (in modern angular)
 interface JokeForm {
   name: FormControl<string | null>;
   phone: FormControl<string | null>;
